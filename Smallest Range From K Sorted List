@@ -1,0 +1,58 @@
+class Node{
+    public:
+    int data;
+    int i;
+    int j;
+    Node(int data,int r,int c)
+    {
+        this->data=data;
+        i=r;
+        j=c;
+    }
+};
+
+class compare{
+    public:
+    bool operator()(Node* a,Node* b) {
+    return a->data>b->data;
+  }
+};
+
+int kSorted(vector<vector<int>> &arr, int k, int n) {
+    // Write your code here.
+    priority_queue<Node*,vector<Node*>,compare> q;
+    Node* maxx=NULL;
+    for (int i = 0; i < k; i++) {
+
+        Node* temp=new Node(arr[i][0],i,0);
+        if(maxx==NULL)
+        maxx=temp;
+        else
+        {
+            if(maxx->data<temp->data)
+            maxx=temp;
+        }
+        q.push(temp);
+    }
+    Node* minn=q.top();
+    int ans=maxx->data-minn->data+1;
+    while(!q.empty())
+    {
+        Node* temp=q.top();
+        q.pop();
+        int data=temp->data;
+        int i=temp->i;
+        int j=temp->j;
+        if(j+1>=n)
+        return ans;
+        else {
+            Node* t=new Node(arr[i][j+1],i,j+1);
+            if(maxx->data<t->data)
+            maxx=t;
+            q.push(t);
+        }
+        ans=min(ans,maxx->data-q.top()->data+1);
+    }
+    cout<<"yes"<<endl;
+    return ans;
+}
