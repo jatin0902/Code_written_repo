@@ -1,0 +1,46 @@
+class Node{
+    public:
+    int data;
+    int i;
+    int j;
+    Node(int data,int r,int c)
+    {
+        this->data=data;
+        i=r;
+        j=c;
+    }
+};
+
+class compare{
+    public:
+    bool operator()(Node* a,Node* b) {
+    return a->data>b->data;
+  }
+};
+
+vector<int> mergeKSortedArrays(vector<vector<int>>&kArrays, int k)
+{
+    // Write your code here.
+    priority_queue<Node*,vector<Node*>,compare> q;
+    for(int i=0;i<k;i++)
+    {
+        Node* temp=new Node(kArrays[i][0],i,0);
+        q.push(temp);
+    }
+    vector<int> ans;
+    while(!q.empty())
+    {
+        Node* temp=q.top();
+        q.pop();
+        ans.push_back(temp->data);
+        int i=temp->i;
+        int j=temp->j;
+        int n=kArrays[i].size();
+        if(j+1<n)
+        {   
+            Node* temp=new Node(kArrays[i][j+1],i,j+1);
+            q.push(temp);
+        }
+    }
+    return ans;
+}
