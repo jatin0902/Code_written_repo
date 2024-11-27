@@ -1,0 +1,45 @@
+
+void soortt(vector<int>&arr,int val)
+{
+	int i=0;
+	while(arr[i]<val&&i<arr.size())
+	i++;
+	int j=arr.size();
+	arr.push_back(val);
+	if(j==i)
+	return ;
+	while(j>i)
+	{
+		arr[j]=arr[j-1];
+		j--;
+	}
+	arr[i]=val;
+	return;
+}
+
+vector<int> findMedian(vector<int> &arr, int n){
+	
+	// Write your code here 
+	vector<int> ans;
+	vector<int> sarr;
+	if(n==0)
+	return ans;
+	ans.push_back(arr[0]);
+	sarr.push_back(arr[0]);
+	for(int i=2;i<=n;i++)
+	{
+		soortt(sarr,arr[i-1]);
+		if(i%2==0)
+		{
+			int mid=i/2;
+			int avg=sarr[mid]+sarr[mid-1];
+			ans.push_back(avg/2);
+		}
+		else
+		{
+			int mid=i/2;
+			ans.push_back(sarr[mid]);
+		}
+	}
+	return ans;
+}
