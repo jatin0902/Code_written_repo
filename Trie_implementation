@@ -1,0 +1,73 @@
+
+class TrieNode{
+    public:
+    char data;
+    TrieNode* child[26];
+    bool isend;
+    TrieNode(char data)
+    {
+        this->data=data;
+        for(int i=0;i<26;i++)
+            child[i]=NULL;
+        isend=false;
+    }
+};
+class Trie {
+
+public:
+     TrieNode* root;
+
+    /** Initialize your data structure here. */
+    Trie() {
+        root=new TrieNode('\0');
+    }
+    void Insele(TrieNode* root,string s)
+    {
+        if(s.length()==0)
+        {
+            root->isend=true;
+            return;
+        }
+        if (root->child[s[0] - 'a'])
+            root=root->child[s[0] - 'a'];
+        else {
+            TrieNode* t=new TrieNode(s[0]);
+            root->child[s[0] - 'a']=t;
+            root=t;
+        }
+        Insele(root,s.substr(1));
+        return ;
+    }
+    /** Inserts a word into the trie. */
+    void insert(string word) {
+        Insele(root,word);
+    }
+    bool FSearch(string word,TrieNode* root)
+    {   
+         if(word.length()==0&&root->isend==true)
+        return true;
+        if(word.length()==0)
+        return false;
+        if(root->child[word[0]-'a']==NULL)
+        return false;
+        return FSearch(word.substr(1),root->child[word[0]-'a']);
+    }
+
+    /** Returns if the word is in the trie. */
+    bool search(string word) {
+       return FSearch(word,root);
+    }
+
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    bool FstartsWith(string prefix,TrieNode* root)
+    {
+        if(prefix.length()==0)
+        return true;
+        if(root->child[prefix[0]-'a']==NULL)
+        return false;
+        return FstartsWith(prefix.substr(1),root->child[prefix[0]-'a']);
+    }
+    bool startsWith(string prefix) {
+        return FstartsWith(prefix,root);
+    }
+};
