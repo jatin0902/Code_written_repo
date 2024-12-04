@@ -1,0 +1,46 @@
+bool checkfes(vector<vector<int>>& sudoku,int ans,int row,int col)
+{
+    for(int i=0;i<9;i++)
+    {
+        if(sudoku[i][col]==ans)
+        return false;
+        if(sudoku[row][i]==ans)
+        return false;
+        if(sudoku[3*(row/3)+i/3][3*(col/3)+i%3]==ans)
+        return false;
+    }
+    return true;
+}
+bool solve(vector<vector<int>>& sudoku,int n)
+{
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            if(sudoku[i][j]==0)
+            {
+                for(int k=1;k<10;k++){
+                  if (checkfes(sudoku, k, i, j)) {
+                    sudoku[i][j] = k;
+                    bool sol = solve(sudoku,n);
+                    if (sol)
+                    return true;
+                    else
+                    sudoku[i][j] = 0;    
+                  }
+                }
+                return false;
+            }
+        }
+    }
+    return true;
+}
+void solveSudoku(vector<vector<int>>& sudoku)
+{
+	// Write your code here
+    // No need to print the final sudoku
+    // Just fill the values in the given matrix
+    int n=sudoku.size();
+    solve(sudoku,n);
+    return ;
+}
