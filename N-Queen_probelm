@@ -1,0 +1,61 @@
+bool isSafe(vector<vector<int>>& board,int row, int col,int n) {
+    // int n = board.size();
+    int i, j;
+
+    // Check this row on left side
+    for (i = 0; i < col; i++)
+        if (board[row][i])
+            return false;
+
+    // Check upper diagonal on left side
+    for (i = row, j = col; i >= 0 && 
+         j >= 0; i--, j--)
+        if (board[i][j])
+            return false;
+
+    // Check lower diagonal on left side
+    for (i = row, j = col; j >= 0 && 
+         i < n; i++, j--)
+        if (board[i][j])
+            return false;
+
+    return true;
+}
+
+void findQpos(int j,int n,vector<vector<int>>& ans,vector<vector<int>>& res)
+{
+	if(j>=n)
+	{
+		vector<int>rr;
+		for(int k=0;k<n;k++)
+		{
+			for(int j=0;j<n;j++)
+			{
+				rr.push_back(ans[k][j]);
+			}
+		}
+		res.push_back(rr);
+		return ;
+	}
+	for(int i=0;i<n;i++)
+	{
+		if(isSafe(ans,i,j,n))
+		{
+			ans[i][j]=1;
+			findQpos(j+1,n,ans,res);
+			ans[i][j]=0;
+		}
+		
+	}
+	return;
+}
+
+vector<vector<int>> nQueens(int n)
+{
+	// Write your code here
+	vector<vector<int>> ans(n,vector<int>(n,0));
+	vector<vector<int>> res;
+	findQpos(0,n,ans,res);
+	return res;
+	
+}
